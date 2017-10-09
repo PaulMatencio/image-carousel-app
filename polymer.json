@@ -1,0 +1,33 @@
+{
+  "entrypoint": "index.html",
+  "sources": [
+    "src/**/*",
+    "service-worker.js",
+    "images/**/*",
+    "bower.json"
+  ],
+  "extraDependencies": [
+    "manifest.json",
+    "bower_components/webcomponentsjs/*.js"
+  ],
+
+  "builds": [{
+    "name": "bundled",
+    "bundle": true,
+    "addServiceWorker" : false,
+    "js": {"minify": true},
+    "css": {"minify": true},
+    "html": {"minify": true}
+    },
+    {
+      "name": "unbundled",
+      "addServiceWorker" : false,
+      "js": {"minify": true},
+      "css": {"minify": true},
+      "html": {"minify": true}
+    }
+ ],
+  "lint": {
+    "rules": ["polymer-2"]
+  }
+}

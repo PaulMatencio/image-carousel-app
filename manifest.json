@@ -1,0 +1,6 @@
+{
+  "name": "image-carousel-app",
+  "short_name": "image-carousel-app",
+  "start_url": "/",
+  "display": "standalone"
+}

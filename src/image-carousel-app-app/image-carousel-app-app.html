@@ -1,0 +1,133 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../../bower_components/icon-toggle/icon-toggle.html">
+<link rel="import" href="../../bower_components/image-carousel/image-carousel.html">
+<!--link rel="import" href="../../bower_components/image-carousel/image-carousel-shared-styles.tml"-->
+<dom-module id="image-carousel-app-app">
+  <template>
+    <style>
+      :host {
+        display: block;
+        line-height: 1.2;
+         --icon-toggle-color: lightgrey;
+         --icon-toggle-outline-color: black;
+         --icon-toggle-pressed-color: red;
+         --iron-icon-width: 48px;
+         --iron-icon-height: 48px;
+      }
+
+      image-carousel {
+        width: 100%;
+        contain: content;
+        margin:0;
+      }
+
+      image-carousel::after {
+        display: block;
+        content: '';
+        padding-top: 65%;
+      }
+
+      image-carousel img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      .toolbar {
+         @apply --layout-horizontal;
+         @apply --layout-end-justified;
+         background-color: gray;
+         color: white;
+       }
+
+       .toggle-icon {
+         margin: 20px 50px 0 0;
+       }
+
+       .toggle-icon:hover .stop::after{
+         position: absolute;
+         top: -10px;
+         content: 'Stop scrolling';
+         color: black;
+         background-color: white;
+         border-radius: 10px;
+         padding: 3px 8px;
+         font-size: 16px;
+       }
+
+      .toggle-icon:hover .start::after {
+        position: absolute;
+        top: -10px;
+        content: 'Start scrolling';
+        color: black;
+        background-color: white;
+        border-radius: 10px;
+        padding: 3px 8px;
+        font-size: 16px;
+      }
+
+      paper-slider {
+        --paper-slider-input: {
+          background:white;
+          width: 150px;
+          font-size: 10px !important;
+        };
+      }
+
+      @media (max-width: 1288px) {
+        image-carousel::after {
+          padding-top: 75%;
+      }
+    }
+    </style>
+    <image-carousel auto-scroll$="[[autoScroll]]" timer="{{timer}}" maxtimer="{{maxtimer}}">
+    </image-carousel>
+    <app-toolbar class="toolbar">
+          <div main-title>Scrolling control</div>
+            <dom-if if="[[autoScroll]]">
+              <template>
+                <paper-slider value="{{timer}}" min="50"  max="[[maxtimer]]" step="[[_step]]" editable></paper-slider>
+              </template>
+            </dom-if>
+          <div class="toggle-icon">
+              <icon-toggle  toggle-icon="arrow-forward" pressed="{{autoScroll}}"></icon-toggle>
+              <dom-if if="[[autoScroll]]">
+                <template>
+                  <span class="stop"> </span>
+                </template>
+              </dom-if>
+              <dom-if if="[[!autoScroll]]">
+                <template>
+                  <span class="start">  </span>
+                </template>
+              </dom-if>
+          </div>
+      </app-toolbar>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+(function() {
+
+    class ImageCarouselAppApp extends Polymer.Element {
+      static get is() { return 'image-carousel-app-app'; }
+      static get properties() {
+        return {
+          autoScroll: {
+            type: Boolean,
+            value: false
+          }
+        };
+      }
+    }
+
+    window.customElements.define(ImageCarouselAppApp.is, ImageCarouselAppApp);
+})();
+
+  </script>
+</dom-module>
