@@ -1,0 +1,100 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<dom-module id="paper-icon-button-custom-styles">
+  <template>
+    <custom-style>
+      <style>
+
+       paper-icon-button {
+        --paper-icon-button-giant-size: 64px;
+        --paper-icon-button-big-size: 48px;
+        --paper-icon-button-medium-size: 32px;
+        --paper-icon-button-small-size: 24px;
+        --paper-icon-button-size: 24px;
+       }
+
+        paper-icon-button.light-blue {
+          color: var(--paper-blue-200);
+          --paper-icon-button-ink-color: var(--paper-blue-100);
+        }
+
+        paper-icon-button {
+          padding: 2px;
+          margin: 0 10px;
+        }
+
+        paper-icon-button.light-blue:hover {
+          background-color: var(--paper-blue-100);
+          color: white;
+          border-radius: 50%;
+        }
+
+        paper-icon-button.blue {
+          --paper-icon-button-ink-color: var(--paper-orange-500);
+          background-color: var(--paper-light-blue-500);
+          color: white;
+          border-radius: 3px;
+          padding: 2px;
+        }
+
+        paper-icon-button.small {
+          height: var(--paper-icon-button-small-size,24px);
+          width:  var(--paper-icon-button-small-size,24px);
+        }
+
+        paper-icon-button.medium {
+          height: var(--paper-icon-button-medium-size,32px);
+          width:  var(--paper-icon-button-medium-size,32px);
+        }
+
+        paper-icon-button.big {
+          height:  var(--paper-icon-button-big-size,48px);
+          width:  var(--paper-icon-button-big-size,48px);
+        }
+
+        paper-icon-button.giant {
+          width:  var(--paper-icon-button-giant-size,64px);
+          height:  var(--paper-icon-button-giant-size,64px);
+        }
+
+        paper-icon-button[hidden] {
+          display: none;
+        }
+
+        @media (max-width: 767px) {
+         paper-icon-button.big  {
+            height: 32px;
+            width:  32px;
+          }
+
+          paper-icon-button.giant {
+            height: 48px;
+            width:  48px;
+          }
+
+          icon-toogle {
+            height: 32px;
+            width:  32px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          paper-icon-button.medium,   paper-icon-button.big  {
+            height: 24px;
+            width:  24px;
+          }
+
+          paper-icon-button.giant {
+            height: 24px;
+            width:  24px;
+          }
+
+          icon-toogle {
+            height: 32px;
+            width:  32px;
+          }
+        }
+      }
+      </style>
+    </custom-style>
+  </template>
+  <dom-module>

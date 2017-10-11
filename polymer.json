@@ -12,7 +12,7 @@
   ],
 
   "builds": [{
-    "name": "bundled",
+    "name": "es5-bundled",
     "bundle": true,
     "addServiceWorker" : false,
     "js": {"minify": true},

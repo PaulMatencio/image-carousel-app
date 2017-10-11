@@ -5,7 +5,11 @@
     "polymer": "Polymer/polymer#^2.0.0",
     "image-carousel": "PaulMatencio/image-carousel",
     "paper-slider": "^2.0.2",
-    "icon-toggle": "PaulMatencio/icon-toggle"
+    "icon-toggle": "PaulMatencio/icon-toggle",
+    "iron-icons": "^2.0.1",
+    "paper-item": "^2.0.0",
+    "paper-button": "^2.0.0",
+    "query-images": "./query-images/"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0",

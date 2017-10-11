@@ -1,0 +1,172 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/lib/elements/dom-bind.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../paper-input/paper-input-container.html">
+<link rel="import" href="paper-icon-button-custom-styles.html">
+<dom-module id="query-images">
+  <template>
+    <custom-style>
+      <!--style include="demo-pages-styles"></style-->
+      <tyle include="paper-icon-button-custom-styles"></style>
+    </custom-style>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <paper-input-container>
+        <label slot="label">Search text</label>
+        <paper-icon-button slot="prefix" icon="home"></paper-icon-button>
+        <iron-input slot="input"  bind-value="{{query}}">
+          <input type="text" placeholder="Address" size="20" value="{{query::input}}">
+        </iron-input>
+        <paper-icon-button slot="suffix" icon="clear" on-tap="_clearFilter"></paper-icon-button>
+        <paper-icon-button slot="suffix" icon="search" on-tap="_searchFilter"></paper-icon-button>
+    </paper-input-container>
+  </template>
+
+  <script>
+    /**
+     * `query-images`
+     * fetch images
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+      class QueryImages extends Polymer.Element {
+        static get is() { return 'query-images'; }
+        static get properties() {
+          return {
+            query: {
+              type: String,
+              value: "",
+              notify: true,
+            },
+            url: {
+              type: String,
+              value: 'https://api.unsplash.com/search/photos?page=1&query=',
+            },
+            freshData: {
+              type: Boolean,
+              value: false
+            },
+            cacheStorage: {
+              type: Boolean,
+              value: true
+            },
+            clientID: {
+              type: String,
+              value: 'Client-ID 7ea30f97ca6d7ede1ff375ac191cf045dbd918f206f6cdabfcf8c214d85f993e'
+            }
+          };
+        }
+        ready() {
+          super.ready();
+          console.log(this.cacheStorage);
+          this._installListener();
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+        }
+
+        _installListener() {
+        }
+
+        _clearFilter() {
+          this.set("query","");
+        }
+
+        _searchFilter() {
+          if (this.query.length == 0)  return;
+          this._searchImages();
+        }
+
+        _searchImages() {
+          let requestHeaders = new Headers();
+          let unsplash = false;
+          requestHeaders.append('Authorization',this.clientID);
+          let url = this.url + this.query;
+
+          getJson(url,requestHeaders)
+            .then(json => {
+               if (!unsplash || this.freshData)  {
+                  unsplash = true;
+                  addtoCarousel(json);
+               }
+             })
+            .catch( error => {
+              requestError(error,'images');
+            })
+
+            /* Read images from the cache */
+          if (this.cacheStorage) {
+              caches.match(url).then(response => {
+                if (!response )  throw Error(`No cache data for ${url}`);
+                  return response.json();
+                })
+                .then(json => {
+                  if (!unsplash) {
+                      unsplash = true;
+                      addtoCarousel(json);
+                    }
+                  })
+                .catch( error => noCache(error,'images'))
+             } //
+         }
+    }
+
+
+    function getJson(url,requestHeaders) {
+      return fetch(url,{
+        headers: requestHeaders
+      })
+      .then(response => validateResponse(response))
+      .then(response => {
+          return response.json();
+       })
+    }
+
+    function validateResponse(response) {
+      if (!response.ok) {
+        throw(response.statusText);
+      } else return response;
+    }
+
+    function noCache(error,part) {
+      console.log(error,part);
+    }
+
+
+
+    function addtoCarousel(data) {
+      const imageCarouselApp = document.querySelector('image-carousel-app-app');
+      const carousel = imageCarouselApp.shadowRoot.querySelector("image-carousel");
+      if (imageCarouselApp) {
+         data.results.forEach(function(image) {
+             let imageUrl = image.urls.regular;
+             let userName  = image.user.name;
+             /*
+             let html =
+             `<figure class="item"> <img data-src="${image.urls.regular}" alt="${this.query}">
+              <figcaption>${this.query} by ${image.user.name}</figcaption>
+              </figure>`;
+              */
+             var img  = document.createElement("img");
+             img.setAttribute('data-src',imageUrl);
+             img.setAttribute('data-caption',userName);
+             carousel.appendChild(img);
+        });
+      } else {
+        console.log("no carousel");
+      }
+    }
+
+    window.customElements.define(QueryImages.is, QueryImages);
+  </script>
+</dom-module>
