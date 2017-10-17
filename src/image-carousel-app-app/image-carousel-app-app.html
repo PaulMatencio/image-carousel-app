@@ -26,7 +26,7 @@
       image-carousel::after {
         display: block;
         content: '';
-        padding-top: 65%;
+        padding-top: 60%;
       }
 
       image-carousel img {
@@ -120,8 +120,14 @@
         return {
           autoScroll: {
             type: Boolean,
-            value: false
+            value: false,
+            reflectToAttribute: true
           },
+          timer: {
+            type: Number,
+            value: 250,
+            reflectToAttribute: true
+          }
         };
       }
     }
