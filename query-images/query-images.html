@@ -65,6 +65,7 @@
             }
           };
         }
+
         ready() {
           super.ready();
           console.log(this.cacheStorage);
@@ -76,6 +77,10 @@
         }
 
         _installListener() {
+        }
+
+        setCacheStorage(value) {
+         this.set('cacheStorage',value)
         }
 
         _clearFilter() {
@@ -168,5 +173,7 @@
     }
 
     window.customElements.define(QueryImages.is, QueryImages);
+
+
   </script>
 </dom-module>

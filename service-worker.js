@@ -106,8 +106,7 @@
           });
        }  else {
             // return myFetch(event.request);
-
-            /* for search, always fetch from the netwaork
+            /* for search, always fetch from the network
             *  then cache  the response
             *  clone the respnse and  return it to the requester
             *  it is up to the requestor to use or not the response

@@ -12,6 +12,10 @@
     <link rel="manifest" href="/manifest.json">
     <link rel="import" href="/src/image-carousel-app-app/image-carousel-app-app.html">
     <link rel="import" href="/bower_components/query-images/query-images.html">
+    <link rel="import" href="/bower_components/paper-dropdown-menu/paper-dropdown-menu-light.html">
+    <link rel="import" href="/bower_components/paper-listbox/paper-listbox.html">
+    <link rel="import" href="/bower_components/paper-item/paper-item.html">
+    <link rel="import" href="/bower_components/paper-styles/element-styles/paper-material-styles.html">
     <script src="/bower_components/webcomponentsjs/webcomponents-loader.js"></script>
   </head>
   <body>
@@ -22,6 +26,15 @@
       <div class="wrapper">
         <div class="left">
           <query-images cache-storage$="true"></query-images>
+          <paper-dropdown-menu-light id="_transform" label="Transformation" noink no-animations dynamic-align="bottom" horizontal-align="right">
+              <paper-listbox  slot="dropdown-content" selected=0 class="dropdown-content">
+                  <paper-item>invert</paper-item>
+                  <paper-item>chromea</paper-item>
+                  <paper-item>greyscale</paper-item>
+                  <paper-item>vibrant</paper-item>
+                  <paper-item>revert</paper-item>
+              </paper-listbox>
+          </paper-dropdown-menu-light>
         </div>
         <div class="right">
           <image-carousel-app-app></image-carousel-app-app>
@@ -42,17 +55,37 @@
         .catch(function(error) {
           console.log('Registration failed:', error);
         });
+
+        const imageCarouselApp = document.querySelector('image-carousel-app-app');
+
+        const carousel = imageCarouselApp.shadowRoot.querySelector('image-carousel');
+        if (!carousel) {
+          console.log("No image carousel");
+          return;
+        }
+
+        const _transform = document.querySelector('#_transform');
+        if (_transform) {
+          _transform.addEventListener('value-changed', e => {
+              carousel.set('transform',e.detail.value)
+          });
+        }
+        /* create a web worker */
+        let worker = new Worker("worker.js");
+        if (worker) {
+          carousel.set('worker',worker);
+        }
+
+        imageCarouselApp.setTimer(500);
+        let images= ["https://app-layout-assets.appspot.com/assets/bg1.jpg"]
+        images.forEach( function(image) {
+            var img  = document.createElement("img");
+            img.setAttribute('data-src',image);
+            carousel.appendChild(img);
+        });
+
+
      })();
-    </script>
-    <script>
-      const imageCarouselApp = document.querySelector('image-carousel-app-app');
-      const carousel = imageCarouselApp.shadowRoot.querySelector("image-carousel");
-      let images= ["https://app-layout-assets.appspot.com/assets/bg1.jpg"]
-      images.forEach( function(image) {
-          var img  = document.createElement("img");
-          img.setAttribute('data-src',image);
-          carousel.appendChild(img);
-      });
     </script>
   </body>
 </html>
