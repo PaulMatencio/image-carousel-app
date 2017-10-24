@@ -44,6 +44,7 @@
     <script>
      (function() {
         'use strict';
+        let workerStarted = false;
         if (!('serviceWorker' in navigator)) {
           console.log('Service worker not supported');
           return;
@@ -55,27 +56,14 @@
         .catch(function(error) {
           console.log('Registration failed:', error);
         });
-
         const imageCarouselApp = document.querySelector('image-carousel-app-app');
 
+        /* add image to the carousel */
         const carousel = imageCarouselApp.shadowRoot.querySelector('image-carousel');
         if (!carousel) {
           console.log("No image carousel");
           return;
         }
-
-        const _transform = document.querySelector('#_transform');
-        if (_transform) {
-          _transform.addEventListener('value-changed', e => {
-              carousel.set('transform',e.detail.value)
-          });
-        }
-        /* create a web worker */
-        let worker = new Worker("worker.js");
-        if (worker) {
-          carousel.set('worker',worker);
-        }
-
         imageCarouselApp.setTimer(500);
         let images= ["https://app-layout-assets.appspot.com/assets/bg1.jpg"]
         images.forEach( function(image) {
@@ -83,6 +71,21 @@
             img.setAttribute('data-src',image);
             carousel.appendChild(img);
         });
+
+        /*  start a  web worker if transformation is needed */
+        const _transform = document.querySelector('#_transform');
+        if (_transform) {
+          _transform.addEventListener('value-changed', e => {
+              if (!workerStarted) {
+                let worker = new Worker("worker.js");
+                workerStarted = true;
+                carousel.set('worker',worker);
+                console.log(carousel.worker);
+              }
+              carousel.set('transform',e.detail.value);
+              imageCarouselApp.setTimer(1000);
+          });
+        }
 
 
      })();
